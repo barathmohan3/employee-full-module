@@ -1,10 +1,10 @@
-test "ec2_instance_exists" {
-  command = plan
+run "check_mfa_enabled" {
+  module {
+    source = "./."
+  }
 
-  assertions {
-    resource_changes {
-      type   = "aws_instance"
-      action = "create"
-    }
+  assert {
+    condition = module.cognito_user_pool.mfa_configuration == "ON"
+    error_message = "MFA should be enabled for Cognito User Pool"
   }
 }
